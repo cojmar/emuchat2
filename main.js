@@ -107,7 +107,12 @@ new class {
     }
     init_room(room) {
         room.on('msg', (data, user) => {
-            let msg = `[${this.time()}][${user.nick}] ${data.toString()}`
+            let msg = {
+                time: this.time(),
+                nick: user.nick,
+                user: user.id,
+                message: data.toString()
+            }
             room.messages.push(msg)
             if (this.room?.name === room.name) this.render_message(msg)
             else {
@@ -156,9 +161,12 @@ new class {
     }
     render_message(msg) {
         let item = this.template_item('#message_item', '.messages')
-        item.querySelector('.message').innerHTML = msg
+        Object.keys(msg).map(k => {
+            let el = item.querySelector(`.${k}`)
+            if (el) el.innerHTML = msg[k]
+        })
         let el = document.querySelector('.messages')
-        el.scrollTop = el.scrollHeight
+        if (el) el.scrollTop = el.scrollHeight
     }
     send_message() {
         let msg = document.querySelector('.send_area').value.trim()
