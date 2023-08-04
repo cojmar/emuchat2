@@ -196,7 +196,7 @@ new class {
     render_user(user) {
         let item = this.template_item('#user_item', '.right')
         item.id = `user-${user.id}`
-        item.querySelector('.name').innerHTML = this.ws.strip_html(user.nick)
+        item.querySelector('.name').innerHTML = user.nick
         if (user.id === this.my_data.id) item.querySelector('.name').style.color = "var(--active-color)"
     }
     render_rooms() {
