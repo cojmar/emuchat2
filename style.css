@@ -5,13 +5,16 @@
     --unread-color: orange;
     --modal-backgound: rgba(26, 26, 26, 0.664);
     --button-background: #555657;
+    --input-background: #242424;
+    --font-familiy: monospace, monospace
 }
 
 html,
 body {
     height: 100%;
     margin: 0;
-    color: var(--border-color)
+    color: var(--border-color);
+    font-family: var(--font-familiy);
 }
 
 *:focus {
@@ -25,6 +28,21 @@ button {
     -webkit-border-radius: 0px;
     border: none;
     outline: none;
+    color: var(--border-color);
+    font-family: var(--font-familiy);
+}
+
+input,
+input[type="text"] {
+    color: var(--border-color);
+    background-color: var(--input-background);
+    outline: none;
+    border: 1px solid var(--border-color);
+    padding: 2px;
+    font-family: var(--font-familiy);
+}
+
+::placeholder {
     color: var(--border-color);
 }
 
@@ -108,7 +126,9 @@ button:hover {
     float: left;
     width: calc(100% - 44px);
     height: 30px;
-    border: none;
+    border: none !important;
+    padding: 0px !important;
+    padding-left: 4px !important;
     outline: none;
     font-size: 18px;
     /* You can adjust the color and thickness of the outline */
@@ -150,7 +170,8 @@ button:hover {
 }
 
 .menu_button {
-    margin-right: -3px;
+    float: left;
+    margin-right: 1px;
 }
 
 

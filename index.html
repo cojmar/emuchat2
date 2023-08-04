@@ -16,8 +16,8 @@
         Nick <input type="text" class="nick" maxlength="30">
     </template>
     <template id="join_room_modal">
-        room <input type="text" class="room_name" maxlength="30">
-        <button class="join">join</button>
+        Room <input type="text" class="room_name" maxlength="30">
+        <button class="join">Join</button>
     </template>
 
     <template id="user_item">
@@ -43,9 +43,7 @@
     </template>
 
     <template id="message_item" style="padding: 0px;">
-        [<span class="time"></span>]
-        [<span class="nick"></span>]
-        <span class="message" style="margin-left: 5px;"></span>
+        [<span class="time"></span>][<span class="nick"></span>]<span class="message" style="margin-left: 5px;"></span>
     </template>
 
     <div class="top">
@@ -98,11 +96,11 @@
         </div>
     </div>
     <div class="bottom">
-        <input type="text" class="send_area">
+        <input type="text" class="send_area" placeholder="Type a message">
         <button class="send_button">
             <svg height="20px" width="20px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#ccc"
-                stroke="#ccc">
+                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
+                fill="var(--border-color)" stroke="var(--border-color)">
 
                 <g id="SVGRepo_bgCarrier" stroke-width="0" />
 
