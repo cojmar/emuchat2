@@ -163,7 +163,7 @@ new class {
         let item = this.template_item('#message_item', '.messages')
         Object.keys(msg).map(k => {
             let el = item.querySelector(`.${k}`)
-            if (el) el.innerHTML = msg[k]
+            if (el) el.innerHTML = this.ws.strip_html(msg[k])
         })
         let el = document.querySelector('.messages')
         if (el) el.scrollTop = el.scrollHeight
@@ -196,7 +196,7 @@ new class {
     render_user(user) {
         let item = this.template_item('#user_item', '.right')
         item.id = `user-${user.id}`
-        item.querySelector('.name').innerHTML = user.nick
+        item.querySelector('.name').innerHTML = this.ws.strip_html(user.nick)
         if (user.id === this.my_data.id) item.querySelector('.name').style.color = "var(--active-color)"
     }
     render_rooms() {
