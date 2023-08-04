@@ -101,7 +101,7 @@ new class {
         document.querySelector('.right').innerHTML = ''
 
         this.room = this.ws.rooms.get(Array.from(this.ws.rooms.values()).slice(-1)[0]?.name)
-        if (this.room) document.querySelector(`#room-${this.room.name}`).querySelector('.name').style.color = "var(--active-color)"
+        if (this.room) document.querySelector(`#room-${this.format_id(this.room.name)}`).querySelector('.name').style.color = "var(--active-color)"
         this.render_users()
         this.render_messages()
     }
