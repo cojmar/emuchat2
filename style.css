@@ -42,7 +42,7 @@ button:hover {
 .container {
     height: calc(100% - 68px);
     display: grid;
-    grid-template-columns: 0.5fr 2fr 0.5fr;
+    grid-template-columns: 0.55fr 1.9fr 0.55fr;
     grid-template-rows: 1fr;
     gap: 0px 0px;
     grid-auto-flow: row;
