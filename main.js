@@ -111,8 +111,9 @@ new class {
                 time: this.time(),
                 nick: user.nick,
                 user: user.id,
-                message: data.toString()
+                message: this.strip_html(data.toString())
             }
+            if (!msg.message) return false
             room.messages.push(msg)
             if (this.room?.name === room.name) this.render_message(msg)
             else {
@@ -163,7 +164,7 @@ new class {
         let item = this.template_item('#message_item', '.messages')
         Object.keys(msg).map(k => {
             let el = item.querySelector(`.${k}`)
-            if (el) el.innerHTML = this.ws.strip_html(msg[k])
+            if (el) el.innerHTML = msg[k]
         })
         let el = document.querySelector('.messages')
         if (el) el.scrollTop = el.scrollHeight
