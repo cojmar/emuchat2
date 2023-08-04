@@ -58,7 +58,7 @@ button:hover {
 }
 
 .container {
-    height: calc(100% - 68px);
+    height: calc(100% - 66px);
     display: grid;
     grid-template-columns: 0.4fr 2.2fr 0.4fr;
     grid-template-rows: 1fr;
@@ -68,7 +68,7 @@ button:hover {
         "left center right"
 }
 
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 1600px) {
     .container {
         grid-template-columns: 0.52fr 1.6fr 0.52fr;
     }
@@ -76,11 +76,18 @@ button:hover {
 
 
 
-@media only screen and (max-width: 950px) {
+@media only screen and (max-width: 1072px) {
     .container {
         grid-template-columns: 0.5fr 1.55fr 0.95fr;
     }
 }
+
+@media only screen and (max-width: 670px) {
+    .container {
+        grid-template-columns: 0.5fr 1.4fr 1.1fr;
+    }
+}
+
 
 
 
