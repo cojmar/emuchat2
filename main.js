@@ -106,6 +106,12 @@ new class {
         this.render_messages()
     }
     init_room(room) {
+
+        room.on('test', (data, user) => {
+            console.log(user)
+            console.log(data)
+        })
+
         room.on('msg', (data, user) => {
             let msg = {
                 time: this.time(),
@@ -182,8 +188,15 @@ new class {
             msg = msg.substring(1).split(' ')
             let cmd = msg.shift()
             msg = msg.join(' ')
-            this.ws.signal(cmd, msg)
-            document.querySelector('.send_area').value = ''
+
+            if (Object.values(short_cuts).find(v => v === `/${cmd}`)) {
+                document.querySelector('.send_area').value = ''
+                this.ws.signal(cmd, msg)
+            }
+            else if (this.room) {
+                this.room.send(cmd, msg)
+                document.querySelector('.send_area').value = ''
+            }
         } else {
             if (!this.room) return false
             if (this.room.send('msg', msg)) document.querySelector('.send_area').value = ''
