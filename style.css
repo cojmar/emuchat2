@@ -4,6 +4,7 @@
     --active-color: green;
     --unread-color: orange;
     --modal-backgound: rgba(26, 26, 26, 0.664);
+    --button-background: #555657;
 }
 
 html,
@@ -19,6 +20,23 @@ body {
 
 button {
     cursor: pointer;
+    background-color: var(--button-background);
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    border: none;
+    outline: none;
+    color: var(--border-color);
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.modal_content button {
+    border: 1px solid var(--border-color);
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .container {
@@ -82,16 +100,8 @@ button {
 
 .send_button {
     float: left;
-    border: none;
-    outline: none;
-
     width: 40px;
     height: 30px;
-    cursor: pointer;
-}
-
-.send_button:hover {
-    opacity: 0.8;
 }
 
 .user_item,
@@ -110,6 +120,7 @@ button {
 
 .modal {
     display: none;
+    margin-top: 10px;
 }
 
 .modal_background {
@@ -124,14 +135,9 @@ button {
 
 .menu_button {
     margin-right: -3px;
-    -webkit-appearance: none;
-    -webkit-border-radius: 0px;
-    border: none;
 }
 
-.menu_button:hover {
-    opacity: 0.8;
-}
+
 
 .room_item {
     overflow: hidden;
