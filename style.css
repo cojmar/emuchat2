@@ -78,7 +78,7 @@ button:hover {
 }
 
 .container {
-    height: calc(100% - 66px);
+    height: calc(100% - 64px);
     display: grid;
     grid-template-columns: 0.4fr 2.2fr 0.4fr;
     grid-template-rows: 1fr;
