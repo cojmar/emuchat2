@@ -30,6 +30,20 @@ new class {
         }
         this.disable_autocomplete()
     }
+    css_root_vars() {
+        return document.styleSheets[0].cssRules[0].style.cssText.split(";").reduce((r, v) => {
+            let k = v.split(':')[0].trim()
+            if (k.substring(0, 2) !== '--') return r
+            k = k.substring(2)
+            r[k] = this.css_var(k)
+            return r
+        }, {})
+    }
+    css_var(name, value) {
+        if (name.substring(0, 2) !== "--") name = "--" + name
+        if (value) document.documentElement.style.setProperty(name, value)
+        return getComputedStyle(document.documentElement).getPropertyValue(name)
+    }
     close_modal() {
         document.querySelector('.modal').style.display = "none"
         document.querySelector('.send_area').focus()
@@ -224,6 +238,7 @@ new class {
     }
     main() {
         document.querySelector('.send_area').focus()
+        this.css_root_vars()
     }
 
     //---- modal pages
@@ -246,6 +261,27 @@ new class {
         }
         nick.onchange = () => nick_change()
         nick.addEventListener('keyup', () => nick_change())
+        //--css vars
+        modal.appendChild(document.createElement('hr'))
+        let vars = this.css_root_vars()
+        Object.keys(vars).map(k => {
+            let settings_item = this.template_item('#settings_css_var', '.modal_content')
+            settings_item.querySelector('span').innerHTML = k
+            let input = settings_item.querySelector('input')
+            if (k.indexOf('-color') !== -1) {
+                input.type = 'color'
+                input.addEventListener('input', () => f())
+            }
+            input.value = vars[k]
+            let f = () => {
+                this.css_var(k, input.value)
+            }
+            input.addEventListener('change', () => f())
+            input.addEventListener('keyup', () => f())
+
+            //console.log(settings_item)
+        })
+
     }
     join_room_modal(modal) {
         let room_name = modal.querySelector('.room_name')

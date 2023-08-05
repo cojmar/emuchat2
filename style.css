@@ -1,49 +1,69 @@
 :root {
     color-scheme: dark;
-    --border-color: #ccc;
-    --active-color: green;
-    --unread-color: orange;
-    --modal-backgound: rgba(26, 26, 26, 0.664);
-    --button-background: #555657;
-    --input-background: #242424;
+    --front-color: #cccccc;
+    --back-color: #222222;
+    --active-color: #008000;
+    --unread-color: #ffa500;
+    --modal-backgound-color: #1a1a1a;
+    --button-background-color: #555657;
+    --input-background-color: #363636;
     --font-familiy: monospace, monospace
+}
+
+hr {
+    height: 1px;
+    border: none;
+    background-color: var(--front-color);
 }
 
 html,
 body {
     height: 100%;
     margin: 0;
-    color: var(--border-color);
+    color: var(--front-color);
     font-family: var(--font-familiy);
+    background-color: var(--back-color);
 }
 
 *:focus {
     outline: none;
 }
 
+::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+    background: var(--input-background-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--button-background-color);
+
+}
+
+
 button {
     cursor: pointer;
-    background-color: var(--button-background);
+    background-color: var(--button-background-color);
     -webkit-appearance: none;
     -webkit-border-radius: 0px;
     border: none;
     outline: none;
-    color: var(--border-color);
+    color: var(--front-color);
     font-family: var(--font-familiy);
 }
 
 input,
 input[type="text"] {
-    color: var(--border-color);
-    background-color: var(--input-background);
+    color: var(--front-color);
+    background-color: var(--input-background-color);
     outline: none;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--front-color);
     padding: 2px;
     font-family: var(--font-familiy);
 }
 
 ::placeholder {
-    color: var(--border-color);
+    color: var(--front-color);
 }
 
 button:hover {
@@ -51,7 +71,7 @@ button:hover {
 }
 
 .modal_content button {
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--front-color);
     padding: 2px;
     padding-left: 10px;
     padding-right: 10px;
@@ -93,31 +113,33 @@ button:hover {
 
 .top {
     height: 30px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--front-color);
 }
 
 .left {
     grid-area: left;
-    border-left: 1px solid var(--border-color);
+    border-left: 1px solid var(--front-color);
     padding: 4px;
     overflow-y: auto;
 }
 
 .right {
     grid-area: right;
-    border-right: 1px solid var(--border-color);
+    border-right: 1px solid var(--front-color);
     padding: 4px;
     overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .center {
     grid-area: center;
-    border-left: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
+    border-left: 1px solid var(--front-color);
+    border-right: 1px solid var(--front-color);
     overflow: hidden;
 }
 
 .messages {
+    scrollbar-width: thin;
     overflow-y: auto;
     height: 99%;
     padding: 4px;
@@ -126,7 +148,7 @@ button:hover {
 .bottom {
     height: 30px;
     overflow: hidden;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--front-color);
 }
 
 .send_area {
@@ -157,8 +179,8 @@ button:hover {
     padding: 10px;
     left: 0px;
     z-index: 2;
-    border: 1px solid var(--border-color);
-    background-color: var(--modal-backgound);
+    border: 1px solid var(--front-color);
+    background-color: var(--modal-backgound-color);
 }
 
 .modal {
@@ -171,8 +193,9 @@ button:hover {
     top: 0px;
     right: 0px;
     bottom: 0px;
-    background-color: var(--modal-backgound);
+    background-color: var(--modal-backgound-color);
     z-index: 1;
+    opacity: 0.8;
 }
 
 .menu_button {
