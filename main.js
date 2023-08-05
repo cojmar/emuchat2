@@ -268,12 +268,24 @@ new class {
             let settings_item = this.template_item('#settings_css_var', '.modal_content')
             settings_item.querySelector('span').innerHTML = k
             let input = settings_item.querySelector('input')
+            let f = () => this.css_var(k, input.value)
             if (k.indexOf('-color') !== -1) {
                 input.type = 'color'
                 input.addEventListener('input', () => f())
+            } else if (k.indexOf('-range') !== -1) {
+                vars[k] = parseInt(vars[k].replace('px', ''))
+                input.type = 'range'
+                if (k === 'zoom-range') {
+                    input.max = 30
+                    input.min = 12
+                }
+                input.style.height = '1px'
+                f = () => this.css_var(k, `${input.value}px`)
+                let span = document.createElement('span')
+                span.innerHTML = 'px'
+                //settings_item.appendChild(span)
             }
             input.value = vars[k]
-            let f = () => this.css_var(k, input.value)
             input.addEventListener('change', () => f())
             input.addEventListener('keyup', () => f())
         })
