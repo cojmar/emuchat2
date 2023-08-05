@@ -277,7 +277,7 @@ new class {
                 input.type = 'range'
                 if (k === 'zoom-range') {
                     input.max = 30
-                    input.min = 12
+                    input.min = 10
                 }
                 input.style.height = '1px'
                 f = () => this.css_var(k, `${input.value}px`)
