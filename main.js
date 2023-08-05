@@ -20,7 +20,7 @@ new class {
             document.title = this.original_title
         }
         document.querySelector('.left').onclick = () => document.querySelector('.send_area').focus()
-        document.querySelector('.messages').onclick = () => document.querySelector('.send_area').focus()
+        //document.querySelector('.messages').onclick = () => document.querySelector('.send_area').focus()
         document.querySelector('.right').onclick = () => document.querySelector('.send_area').focus()
         document.querySelectorAll('.menu_button').forEach(e => {
             e.onclick = () => { this.load_modal(e.getAttribute('data-target')) }
@@ -273,15 +273,10 @@ new class {
                 input.addEventListener('input', () => f())
             }
             input.value = vars[k]
-            let f = () => {
-                this.css_var(k, input.value)
-            }
+            let f = () => this.css_var(k, input.value)
             input.addEventListener('change', () => f())
             input.addEventListener('keyup', () => f())
-
-            //console.log(settings_item)
         })
-
     }
     join_room_modal(modal) {
         let room_name = modal.querySelector('.room_name')
