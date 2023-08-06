@@ -275,6 +275,7 @@ new class {
         if (!this.room) return false
         document.querySelector('.user_list').innerHTML = ''
         this.room.users.forEach(u => this.render_user(u))
+        this.dom.send_area.placeholder = `You are typing as "${this.ws.me.nick}"`
     }
     main() {
         this.dom.send_area.focus()
