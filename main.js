@@ -3,15 +3,28 @@ new class {
         document.addEventListener('DOMContentLoaded', _ => {
             this.ws = new u_socket(this.auth_data, (my_data) => this.init(my_data))
             this.original_title = document.title
-            this.init_ws()
+
+            this.left_side_visible = true
+            this.right_side_visible = true
             this.init_dom()
+            this.init_ws()
+
             this.ws.connect()
         })
     }
     init_dom() {
-        document.querySelector('.send_area').addEventListener('keypress', (k) => {
+        this.dom = Array.from([
+            'container',
+            'left',
+            'right',
+            'room_name',
+            'room_users_count',
+            'send_area'
+        ]).reduce((r, k) => (r[k] = document.querySelector(`.${k}`), r), {})
+        this.dom.send_area.addEventListener('keypress', (k) => {
             if (k.key === 'Enter') this.send_message()
         })
+
         document.querySelector('.send_button').addEventListener('click', (k) => this.send_message())
         window.onblur = () => this.background = true
         window.onfocus = () => {
@@ -19,16 +32,27 @@ new class {
             clearInterval(this.blink_title)
             document.title = this.original_title
         }
-        document.querySelector('.left').onclick = () => document.querySelector('.send_area').focus()
-        //document.querySelector('.messages').onclick = () => document.querySelector('.send_area').focus()
-        document.querySelector('.right').onclick = () => document.querySelector('.send_area').focus()
-        document.querySelectorAll('.menu_button').forEach(e => {
-            e.onclick = () => { this.load_modal(e.getAttribute('data-target')) }
-        })
-        document.querySelector('.modal_background').onclick = () => {
-            this.close_modal()
+        document.querySelector('.room_list').onclick = () => this.dom.send_area.focus()
+        //document.querySelector('.messages').onclick = () => this.dom.send_area.focus()
+        document.querySelector('.user_list').onclick = () => this.dom.send_area.focus()
+        document.querySelectorAll('.menu_button').forEach(e => e.onclick = () => { this.load_modal(e.getAttribute('data-target')) })
+        document.querySelector('.modal_background').onclick = () => this.close_modal()
+
+        document.querySelector('.toggle_left').onclick = () => {
+            this.left_side_visible = (this.left_side_visible) ? false : true
+            this.render_grid()
+        }
+        document.querySelector('.toggle_right').onclick = () => {
+            this.right_side_visible = (this.right_side_visible) ? false : true
+            this.render_grid()
         }
         this.disable_autocomplete()
+        this.render_grid()
+    }
+    render_grid() {
+        if (!this.mobile) this.dom.container.style.gridTemplateAreas = `"${this.left_side_visible ? 'left' : 'center'} center ${this.right_side_visible ? 'right' : 'center'}"`
+        this.dom.left.style.display = (this.left_side_visible) ? 'block' : 'none'
+        this.dom.right.style.display = (this.right_side_visible) ? 'block' : 'none'
     }
     css_root_vars() {
         return document.styleSheets[0].cssRules[0].style.cssText.split(";").reduce((r, v) => {
@@ -46,7 +70,7 @@ new class {
     }
     close_modal() {
         document.querySelector('.modal').style.display = "none"
-        document.querySelector('.send_area').focus()
+        this.dom.send_area.focus()
         setTimeout(() => {
             let el = document.querySelector('.messages')
             el.scrollTop = el.scrollHeight
@@ -73,17 +97,23 @@ new class {
         modal_content_element.querySelectorAll('input').forEach(e => e.addEventListener('keypress', (k) => {
             if (k.key !== 'Enter') return
             document.querySelector('.modal').style.display = 'none'
-            document.querySelector('.send_area').focus()
+            this.dom.send_area.focus()
         }))
 
     }
     init_ws() {
         this.ws.on('room.data', room => this.init_room(room))
         this.ws.on('room.join', data => {
-            if (data.room === this.room?.name) this.render_user(data.user)
+            if (data.room === this.room?.name) {
+                this.render_user(data.user)
+                this.dom.room_users_count.innerHTML = `${this.room.users.size} users`
+            }
         })
         this.ws.on('room.leave', data => {
-            if (data.room === this.room?.name) document.querySelector(`#user-${data.user}`)?.remove()
+            if (data.room === this.room?.name) {
+                document.querySelector(`#user-${data.user}`)?.remove()
+                this.dom.room_users_count.innerHTML = `${this.room.users.size} users`
+            }
         })
         this.ws.on('room.left', room_name => this.remove_room(room_name))
         this.ws.on('user.nick', (data) => {
@@ -91,8 +121,10 @@ new class {
             if (!room) return false
             let user = room.users.get(data.id)
             if (!user) return false
-            if (room.name === this.room?.name) this.render_users()
+            if (room.name === this.room?.name) this.render_user(user)
+            if (user.id === this.ws.me.id) this.dom.send_area.placeholder = `You are typing as "${this.ws.me.nick}"`
         })
+
     }
     time() {
         let MyDate = new Date()
@@ -112,10 +144,13 @@ new class {
         document.querySelector(`#room-${this.format_id(room_name)}`)?.remove()
         document.querySelectorAll('.room_item').forEach(item => item.querySelector('.name').style.color = "var(--border-color)")
         if (this.room.name !== room_name) return true
-        document.querySelector('.right').innerHTML = ''
+        document.querySelector('.user_list').innerHTML = ''
 
         this.room = this.ws.rooms.get(Array.from(this.ws.rooms.values()).slice(-1)[0]?.name)
-        if (this.room) document.querySelector(`#room-${this.format_id(this.room.name)}`).querySelector('.name').style.color = "var(--active-color)"
+        if (this.room) {
+            document.querySelector(`#room-${this.format_id(this.room.name)}`).querySelector('.name').style.color = "var(--active-color)"
+            this.dom.room_users_count.innerHTML = `${this.room.users.size} users`
+        }
         this.render_users()
         this.render_messages()
     }
@@ -158,7 +193,10 @@ new class {
         this.render_users()
     }
     render_room(room) {
-        let item = this.template_item('#room_item', '.left')
+        this.dom.room_name.innerHTML = this.room.name
+        this.dom.room_users_count.innerHTML = `${this.room.users.size} users`
+
+        let item = this.template_item('#room_item', '.room_list')
         item.querySelector('.name').innerHTML = room.name
         item.id = `room-${this.format_id(room.name)}`
         item.onclick = () => {
@@ -167,6 +205,8 @@ new class {
             if (old_room) old_room.querySelector('.name').style.color = "var(--border-color)"
             item.querySelector('.name').style.color = "var(--active-color)"
             this.room = room
+            this.dom.room_name.innerHTML = this.room.name
+            this.dom.room_users_count.innerHTML = `${this.room.users.size} users`
             this.render_users()
             this.render_messages()
         }
@@ -175,7 +215,7 @@ new class {
         else if (room.unread) item.querySelector('.name').style.color = "var(--unread-color)"
     }
     render_messages() {
-        document.querySelector('.send_area').focus()
+        this.dom.send_area.focus()
         if (!this.room) return false
         document.querySelector('.messages').innerHTML = ''
         this.room.messages.map(m => this.render_message(m))
@@ -190,7 +230,7 @@ new class {
         if (el) el.scrollTop = el.scrollHeight
     }
     send_message() {
-        let msg = document.querySelector('.send_area').value.trim()
+        let msg = this.dom.send_area.value.trim()
         if (!msg) return
         if (msg.charAt(0) === '/') {
             const short_cuts = {
@@ -204,40 +244,40 @@ new class {
             msg = msg.join(' ')
 
             if (Object.values(short_cuts).find(v => v === `/${cmd}`)) {
-                document.querySelector('.send_area').value = ''
+                this.dom.send_area.value = ''
                 this.ws.signal(cmd, msg)
             }
             else if (this.room) {
                 this.room.send(cmd, msg)
-                document.querySelector('.send_area').value = ''
+                this.dom.send_area.value = ''
             }
         } else {
             if (!this.room) return false
-            if (this.room.send('msg', msg)) document.querySelector('.send_area').value = ''
+            if (this.room.send('msg', msg)) this.dom.send_area.value = ''
         }
         return true
     }
     init(data) {
-        this.my_data = data
+        this.dom.send_area.placeholder = `You are typing as "${this.ws.me.nick}"`
         this.main()
     }
     render_user(user) {
-        let item = this.template_item('#user_item', '.right')
+        let item = document.querySelector(`#user-${user.id}`) || this.template_item('#user_item', '.user_list')
         item.id = `user-${user.id}`
         item.querySelector('.name').innerHTML = user.nick
-        if (user.id === this.my_data.id) item.querySelector('.name').style.color = "var(--active-color)"
+        if (user.id === this.ws.me.id) item.querySelector('.name').style.color = "var(--active-color)"
     }
     render_rooms() {
-        document.querySelector('.left').innerHTML = ''
+        document.querySelector('.room_list').innerHTML = ''
         this.ws.rooms.forEach(r => this.render_room(r))
     }
     render_users() {
         if (!this.room) return false
-        document.querySelector('.right').innerHTML = ''
+        document.querySelector('.user_list').innerHTML = ''
         this.room.users.forEach(u => this.render_user(u))
     }
     main() {
-        document.querySelector('.send_area').focus()
+        this.dom.send_area.focus()
         this.css_root_vars()
     }
 

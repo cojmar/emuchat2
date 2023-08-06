@@ -11,6 +11,7 @@
     --zoom-range: 18px;
 }
 
+
 hr {
     height: 1px;
     border: none;
@@ -84,14 +85,14 @@ button:hover {
 }
 
 .container {
-    height: calc(100% - 64px);
+    height: calc(100% - 32px);
     display: grid;
     grid-template-columns: 0.4fr 2.2fr 0.4fr;
     grid-template-rows: 1fr;
     gap: 0px 0px;
     grid-auto-flow: row;
     grid-template-areas:
-        "left center right"
+        "center center center"
 }
 
 @media only screen and (max-width: 1600px) {
@@ -125,16 +126,26 @@ button:hover {
 .left {
     grid-area: left;
     border-left: 1px solid var(--front-color);
+    border-bottom: 1px solid var(--front-color);
+    overflow: hidden;
+    display: none;
+}
+
+.room_list,
+.user_list {
+    border-top: 1px solid var(--front-color);
     padding: 4px;
     overflow-y: auto;
+    scrollbar-width: thin;
+    height: calc(100% - 40px);
 }
 
 .right {
     grid-area: right;
     border-right: 1px solid var(--front-color);
-    padding: 4px;
-    overflow-y: auto;
-    scrollbar-width: thin;
+    border-bottom: 1px solid var(--front-color);
+    overflow: hidden;
+    display: none;
 }
 
 .center {
@@ -147,7 +158,7 @@ button:hover {
 .messages {
     scrollbar-width: thin;
     overflow-y: auto;
-    height: 99%;
+    height: calc(100% - 40px);
     padding: 4px;
 }
 
@@ -155,6 +166,8 @@ button:hover {
     height: 30px;
     overflow: hidden;
     border: 1px solid var(--front-color);
+    border-left: none;
+    border-right: none;
 }
 
 .send_area {
@@ -178,6 +191,10 @@ button:hover {
 .user_item,
 .room_item {
     cursor: pointer;
+}
+
+.room_info {
+    padding: 4px;
 }
 
 .modal_content {
